@@ -5,13 +5,12 @@ import { verifyAuth } from './middleware/auth';
 
 const routes = express.Router();
 
-// Rotas da home
-routes.post('/', register);
-routes.post('/login', login);
+routes.post("/register", register);
+routes.post("/login", login);
 
 routes.use(verifyAuth);
 
-routes.put('/edit', edit);
-routes.delete('/delete', deleteComp);
+routes.put("/edit", edit);
+routes.delete("/delete", deleteComp);
 
 export default routes;

@@ -1,15 +1,13 @@
 import 'dotenv/config';
 
 import { compModel } from '@models/compModel';
-import { NextFunction, Request, Response } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { NextFunction, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 
-interface jwtVerify extends JwtPayload {
-  id?: string | undefined;
-}
+import { CustomRequest, DBFind, JwtVerify } from '../@types/registerType';
 
 export async function verifyAuth(
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) {
@@ -21,8 +19,10 @@ export async function verifyAuth(
 
   try {
     const token = authorization.replace('Bearer ', '').trim();
-    const { id } = jwt.verify(token, process.env.SECRET);
-    // TODO https://stackoverflow.com/questions/66341226/jwt-verifytoken-process-env-jwt-confirm-key-property-id-does-not-exist-on
+    const { id } = jwt.verify(
+      token,
+      process.env.SECRET
+    ) as unknown as JwtVerify;
 
     const user: DBFind = await compModel.findById(id).exec();
 
